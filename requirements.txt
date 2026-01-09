@@ -1,0 +1,11 @@
+scikit-learn
+numpy
+pandas
+matplotlib
+seaborn
+xgboost
+joblib
+streamlit
+
+# Optional (for notebooks/tests)
+jupyter
