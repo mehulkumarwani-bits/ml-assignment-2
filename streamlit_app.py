@@ -93,13 +93,6 @@ def load_metrics_df(model_dir: str = MODEL_DIR) -> pd.DataFrame:
 def main():
     st.title("ML Assignment - Model Demo")
     st.markdown("This demo loads trained models from the `model/` directory.")
-    # Provide a quick download link for a sample test CSV included in the repo
-    test_csv_path = os.path.join("data", "test_data.csv")
-    try:
-        with open(test_csv_path, "rb") as f:
-            st.sidebar.download_button("Download sample test CSV", data=f, file_name="test_data.csv", mime="text/csv")
-    except FileNotFoundError:
-        st.sidebar.warning("Sample test CSV not found. Add `data/test_data.csv` to the repo to enable download.")
 
     info = load_feature_info()
     feature_names = info["feature_names"]
@@ -125,6 +118,74 @@ def main():
 
     st.sidebar.markdown("---")
     st.sidebar.write("Modify feature values below and press **Predict**")
+
+    # Model Evaluation and Test Data Upload Section at the top
+    st.header("Download and Upload Test Data")
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.subheader("Download Sample Test Data")
+        test_csv_path = os.path.join("data", "test_data.csv")
+        try:
+            with open(test_csv_path, "rb") as f:
+                st.download_button("📥 Download test_data.csv", data=f, file_name="test_data.csv", mime="text/csv")
+        except FileNotFoundError:
+            st.warning("Sample test CSV not found. Add `data/test_data.csv` to the repo to enable download.")
+    
+    with col2:
+        st.subheader("Upload Your Test Data")
+        uploaded_file = st.file_uploader('Upload your test data CSV file', type='csv', key='test_data_upload')
+
+    if uploaded_file is not None:
+        st.subheader("Test Data Preview")
+        test_data = pd.read_csv(uploaded_file)
+        st.dataframe(test_data.head())
+        
+        st.header("Model Evaluation")
+        col1, col2 = st.columns([2, 1])
+        
+        with col1:
+            selected_model = st.selectbox('Select a model for evaluation', available_models())
+        
+        with col2:
+            evaluate_btn = st.button('📊 Evaluate Model')
+
+        if evaluate_btn:
+            try:
+                model = load_model(selected_model)
+                scaler = load_scaler()
+                
+                # Extract features and target from test data
+                # Assuming last column is target, rest are features
+                X_test = test_data.iloc[:, :-1].values
+                y_test = test_data.iloc[:, -1].values
+                
+                if scaler is not None:
+                    X_test = scaler.transform(X_test)
+                
+                # Make predictions
+                y_pred = model.predict(X_test)
+                
+                # Display metrics
+                st.subheader("Classification Report")
+                report = classification_report(y_test, y_pred, output_dict=False)
+                st.text(report)
+                
+                st.subheader("Confusion Matrix")
+                cm = confusion_matrix(y_test, y_pred)
+                fig, ax = plt.subplots(figsize=(6, 4))
+                sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax, cbar=True)
+                ax.set_xlabel('Predicted')
+                ax.set_ylabel('Actual')
+                ax.set_title(f'Confusion Matrix - {selected_model}')
+                st.pyplot(fig)
+                
+            except FileNotFoundError as e:
+                st.error(f"Model not found: {str(e)}")
+            except Exception as e:
+                st.error(f"Error during evaluation: {str(e)}")
+
+    st.markdown("---")
 
     # Build feature inputs in the main area using sliders (or number_input for wide ranges)
     st.header("Input features")
@@ -187,36 +248,6 @@ def main():
             st.dataframe(table.sort_values(by="importance", ascending=False).head(10))
         else:
             st.write("No coefficient or feature importance attributes available for this model.")
-
-    # Dataset upload and model evaluation section
-    st.sidebar.header("Model Evaluation")
-    uploaded_file = st.file_uploader('Upload your test data CSV file', type='csv')
-    if uploaded_file is not None:
-        test_data = pd.read_csv(uploaded_file)
-        st.write('Test Data Preview:', test_data.head())
-
-        model_options = available_models()
-        selected_model = st.sidebar.selectbox('Select a model', model_options)
-
-        if st.sidebar.button('Evaluate Model'):
-            # Placeholder for model evaluation logic
-            # model = train_model(selected_model, data)
-            # predictions = model.predict(X_test)
-            # metrics = evaluate_model(predictions, y_test)
-            # st.write(metrics)
-
-            # For demonstration, let's create dummy metrics
-            y_true = [0, 1, 0, 1]  # Replace with actual y_true
-            y_pred = [0, 1, 1, 0]  # Replace with actual predictions
-            st.sidebar.write('Classification Report:', classification_report(y_true, y_pred))
-
-            # Confusion Matrix
-            cm = confusion_matrix(y_true, y_pred)
-            st.sidebar.write('Confusion Matrix:')
-            sns.heatmap(cm, annot=True, fmt='d')
-            plt.xlabel('Predicted')
-            plt.ylabel('True')
-            st.sidebar.pyplot()
 
 
 if __name__ == "__main__":
