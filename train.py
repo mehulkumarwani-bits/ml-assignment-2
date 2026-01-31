@@ -144,24 +144,23 @@ def train_and_save_models(save_dir: str = "model") -> pd.DataFrame:
 
     # Load and preprocess data
     X, y, feature_names = load_data()
-    X_train, X_test, y_train, y_test, scaler = preprocess(X, y)
-
+    
+    # Split data first to get indices
+    X_train, X_test_unscaled, y_train, y_test = train_test_split(
+        X, y, test_size=0.15, random_state=42, stratify=y
+    )
+    
+    # Scale the training and test data
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test_unscaled)
+    
     # Save scaler for later use in deployment
     dump(scaler, os.path.join(save_dir, "scaler.joblib"))
 
-    # Save test data as CSV file (using unscaled original features)
-    test_data_df = pd.DataFrame(X, columns=feature_names)
-    test_data_df['target'] = y
-    # Get only the test set indices
-    X_train, X_test, y_train, y_test, scaler = preprocess(X, y)
-    # Actually, we need to save the original unscaled test data
-    # Recalculate to get the test indices
-    from sklearn.model_selection import train_test_split
-    _, X_test_unscaled, _, y_test_unscaled = train_test_split(
-        X, y, test_size=0.15, random_state=42, stratify=y
-    )
+    # Save test data as CSV file (UNSCALED original features with target)
     test_data_df = pd.DataFrame(X_test_unscaled, columns=feature_names)
-    test_data_df['target'] = y_test_unscaled
+    test_data_df['target'] = y_test
     test_data_csv = os.path.join("data", "test_data.csv")
     os.makedirs("data", exist_ok=True)
     test_data_df.to_csv(test_data_csv, index=False)
