@@ -1,10 +1,8 @@
 """
 train.py
 ---------------------------------
-Implements a full training pipeline for the assignment dataset.
-
-This script does the following:
-- Loads the UCI Breast Cancer Wisconsin dataset (meets >=12 features and >=500 instances)
+Purose: Module implementing the training pipeline for multiple classifiers.
+- Loads the UCI Breast Cancer Wisconsin dataset (features >=12 and instances >=500)
 - Splits the data into train/test sets
 - Scales features using `StandardScaler`
 - Trains six classifiers: Logistic Regression, Decision Tree, KNN, GaussianNB,
@@ -12,7 +10,6 @@ This script does the following:
 - Evaluates each model using Accuracy, AUC, Precision, Recall, F1, and MCC
 - Saves trained models and a metrics CSV into the `model/` directory
 
-The code is heavily commented to explain each step (as requested in the assignment).
 """
 
 import os

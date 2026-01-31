@@ -1,12 +1,10 @@
 """
 app.py
 ---------------------------------
-Simple command-line entrypoint for the assignment project.
+Purpose: Simple command-line entrypoint for the assignment project.
 
 Usage:
-    python app.py train    # Runs training pipeline and saves models/metrics
-
-This file is intentionally minimal — the heavy lifting lives in `train.py`.
+    python app.py train  
 """
 
 import argparse
