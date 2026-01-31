@@ -91,8 +91,9 @@ def load_metrics_df(model_dir: str = MODEL_DIR) -> pd.DataFrame:
 
 
 def main():
-    st.title("ML Assignment - Model Demo")
-    st.markdown("This demo loads trained models from the `model/` directory.")
+    st.title("ML Assignment 2 - Model Demo App")
+    st.markdown("Student Id: 2025AA05133 \n Name: Mehul Kumar Wani")
+    st.markdown("In this demo we load the trained models from the `model/` directory from GitHub Repo.")
 
     info = load_feature_info()
     feature_names = info["feature_names"]
