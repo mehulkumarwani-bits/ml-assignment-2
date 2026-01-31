@@ -93,8 +93,8 @@ def load_metrics_df(model_dir: str = MODEL_DIR) -> pd.DataFrame:
 def main():
     st.markdown("Student Id: 2025AA05133")
     st.markdown("Student Name: Mehul Kumar Wani")
-    st.title("ML Assignment 2 - Model Demo App")
-    st.subheader("Dataset: Breast Cancer Wisconsin (Diagnostic)")
+    st.subheader("ML Assignment 2 - Model Demo App")
+    st.subheader("Dataset: UCI Breast Cancer Wisconsin (Diagnostic)")
     st.markdown("We are loading the trained models from the `model/` directory from GitHub Repo.")
 
     info = load_feature_info()

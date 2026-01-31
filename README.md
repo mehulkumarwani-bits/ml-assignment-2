@@ -21,7 +21,7 @@ are written to the `model/` folder after running the training pipeline.
 
 ## Dataset description
 
-This project uses the UCI Breast Cancer Wisconsin (Diagnostic) dataset, which
+UCI Breast Cancer Wisconsin (Diagnostic) dataset, which
 is available through scikit-learn as `load_breast_cancer()`.
 
 - Number of samples: 569
