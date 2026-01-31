@@ -8,7 +8,7 @@ Usage:
 """
 
 import argparse
-from train_model import train_and_save_models
+from train import train_and_save_models
 
 
 def main():
