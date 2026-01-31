@@ -21,6 +21,9 @@ import importlib
 from joblib import load
 from sklearn.datasets import load_breast_cancer
 from model import MODEL_MODULES, get_module_name
+from sklearn.metrics import confusion_matrix, classification_report
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 MODEL_DIR = "model"
@@ -184,6 +187,36 @@ def main():
             st.dataframe(table.sort_values(by="importance", ascending=False).head(10))
         else:
             st.write("No coefficient or feature importance attributes available for this model.")
+
+    # Dataset upload and model evaluation section
+    st.sidebar.header("Model Evaluation")
+    uploaded_file = st.file_uploader('Upload your test data CSV file', type='csv')
+    if uploaded_file is not None:
+        test_data = pd.read_csv(uploaded_file)
+        st.write('Test Data Preview:', test_data.head())
+
+        model_options = available_models()
+        selected_model = st.sidebar.selectbox('Select a model', model_options)
+
+        if st.sidebar.button('Evaluate Model'):
+            # Placeholder for model evaluation logic
+            # model = train_model(selected_model, data)
+            # predictions = model.predict(X_test)
+            # metrics = evaluate_model(predictions, y_test)
+            # st.write(metrics)
+
+            # For demonstration, let's create dummy metrics
+            y_true = [0, 1, 0, 1]  # Replace with actual y_true
+            y_pred = [0, 1, 1, 0]  # Replace with actual predictions
+            st.sidebar.write('Classification Report:', classification_report(y_true, y_pred))
+
+            # Confusion Matrix
+            cm = confusion_matrix(y_true, y_pred)
+            st.sidebar.write('Confusion Matrix:')
+            sns.heatmap(cm, annot=True, fmt='d')
+            plt.xlabel('Predicted')
+            plt.ylabel('True')
+            st.sidebar.pyplot()
 
 
 if __name__ == "__main__":
