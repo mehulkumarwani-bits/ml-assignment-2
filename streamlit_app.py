@@ -9,10 +9,6 @@ Features:
 - Lets user select a model, modify feature values, and run prediction
 - Displays predicted class, probability (if available), and model metrics
 
-Run with:
-    streamlit run streamlit_app.py
-
-Note: install `streamlit` and other dependencies from `requirements.txt` before running.
 """
 
 import os
