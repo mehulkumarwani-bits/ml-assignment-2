@@ -50,8 +50,6 @@ Comparison Table with the evaluation metrics calculated for all the 6 models as 
 | Random Forest (Ensemble) |   0.9561 | 0.9939 |    0.9589 | 0.9722 | 0.9655 | 0.9054 |
 | XGBoost (Ensemble)       |   0.9561 | 0.9901 |    0.9467 | 0.9861 | 0.9660 | 0.9058 |
 
-Values are rounded to 4 decimal places for readability.
-
 ## Observations
 
 Observations on the performance of each model on the chosen dataset as below:
