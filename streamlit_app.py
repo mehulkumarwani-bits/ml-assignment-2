@@ -90,6 +90,13 @@ def load_metrics_df(model_dir: str = MODEL_DIR) -> pd.DataFrame:
 def main():
     st.title("ML Assignment - Model Demo")
     st.markdown("This demo loads trained models from the `model/` directory.")
+    # Provide a quick download link for a sample test CSV included in the repo
+    test_csv_path = os.path.join("data", "test_data.csv")
+    try:
+        with open(test_csv_path, "rb") as f:
+            st.sidebar.download_button("Download sample test CSV", data=f, file_name="test_data.csv", mime="text/csv")
+    except FileNotFoundError:
+        st.sidebar.warning("Sample test CSV not found. Add `data/test_data.csv` to the repo to enable download.")
 
     info = load_feature_info()
     feature_names = info["feature_names"]
